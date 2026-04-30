@@ -274,9 +274,17 @@ export default function App() {
           {/* Network Visualization */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-8 relative h-64 shadow-sm dark:shadow-xl flex items-center justify-between">
             <div className="flex flex-col items-center gap-3">
-              <div className="w-20 h-20 bg-zinc-50 dark:bg-zinc-800 rounded-2xl flex items-center justify-center border border-zinc-200 dark:border-zinc-700 shadow-inner">
-                <Globe className="text-zinc-400 dark:text-zinc-500" size={32} />
-              </div>
+              <motion.div 
+                animate={packetPhase === "request" ? { 
+                  scale: [1, 1.05, 1],
+                  boxShadow: "0 0 20px rgba(59,130,246,0.3)",
+                  borderColor: "#3b82f6"
+                } : { scale: 1, boxShadow: "none" }}
+                transition={packetPhase === "request" ? { repeat: Infinity, duration: 0.8 } : { duration: 0.2 }}
+                className="w-20 h-20 bg-zinc-50 dark:bg-zinc-800 rounded-2xl flex items-center justify-center border border-zinc-200 dark:border-zinc-700 shadow-inner"
+              >
+                <Globe className={packetPhase === "request" ? "text-blue-500 transition-colors" : "text-zinc-400 dark:text-zinc-500 transition-colors"} size={32} />
+              </motion.div>
               <span className="text-xs font-bold font-mono text-zinc-400 dark:text-zinc-500">BROWSER</span>
             </div>
 
@@ -310,9 +318,17 @@ export default function App() {
             </div>
 
             <div className="flex flex-col items-center gap-3">
-              <div className="w-20 h-20 bg-blue-50 dark:bg-blue-600/10 rounded-2xl flex items-center justify-center border border-blue-200 dark:border-blue-500/30 shadow-sm">
-                <Cpu className="text-blue-500" size={32} />
-              </div>
+              <motion.div 
+                animate={packetPhase === "response" ? { 
+                  scale: [1, 1.05, 1],
+                  boxShadow: "0 0 20px rgba(34,197,94,0.3)",
+                  borderColor: "#22c55e"
+                } : { scale: 1, boxShadow: "none" }}
+                transition={packetPhase === "response" ? { repeat: Infinity, duration: 0.8 } : { duration: 0.2 }}
+                className="w-20 h-20 bg-blue-50 dark:bg-blue-600/10 rounded-2xl flex items-center justify-center border border-blue-200 dark:border-blue-500/30 shadow-sm"
+              >
+                <Cpu className={packetPhase === "response" ? "text-green-500 transition-colors" : "text-blue-500 transition-colors"} size={32} />
+              </motion.div>
               <span className="text-xs font-bold font-mono text-zinc-400 dark:text-zinc-500">API SERVER</span>
             </div>
           </div>
