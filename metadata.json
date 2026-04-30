@@ -1,0 +1,6 @@
+{
+  "name": "HTTP Explorer: O Jogo do Protocolo",
+  "description": "Um simulador interativo para aprender métodos HTTP (GET, POST, PUT, DELETE) e códigos de status através de desafios práticos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
