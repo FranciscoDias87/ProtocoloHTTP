@@ -106,8 +106,9 @@ app.get("/api/secure-data", (req, res) => {
 });
 
 // --- VITE MIDDLEWARE / STATIC FILES ---
-async function setupServer() {
+async function start() {
   console.log("Setting up server routes...");
+
   if (process.env.NODE_ENV !== "production") {
     try {
       const { createServer: createViteServer } = await import("vite");
@@ -121,25 +122,24 @@ async function setupServer() {
       console.error("Failed to load Vite middleware:", e);
     }
   } else if (!process.env.VERCEL) {
-    // Only serve static files if NOT on Vercel (Vercel handles them via config)
     const distPath = path.join(process.cwd(), "dist");
+    // Only serve if directory exists
     app.use(express.static(distPath));
     app.get("*", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });
-    console.log("Static file serving enabled.");
+    console.log("Static file serving enabled for production.");
+  }
+
+  // Start listening only after setup is done
+  if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
+    const PORT = Number(process.env.PORT) || 3000;
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
   }
 }
 
-// Start setup but don't await blocking export
-setupServer();
-
-// For local/Cloud Run environment
-if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
-  const PORT = Number(process.env.PORT) || 3000;
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
-}
+start();
 
 export default app;
