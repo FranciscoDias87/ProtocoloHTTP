@@ -125,7 +125,20 @@ export default function App() {
       }
 
       const res = await fetch(path, options);
-      const data = await res.json();
+      
+      let data;
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        data = {
+          status: res.status,
+          message: res.statusText || "Erro desconhecido",
+          explanation: "O servidor retornou uma resposta que não é JSON. Isso pode ocorrer se houver um erro de configuração no servidor ou se o caminho estiver incorreto.",
+          raw: text.substring(0, 200)
+        };
+      }
       
       setPacketPhase("response");
       await new Promise(r => setTimeout(r, 1200));
